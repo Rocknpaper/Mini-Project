@@ -1,4 +1,5 @@
 from flask_restful import Resource, request
+from json import loads
 from myproject.models.employeeWorkDetails import EmployeeWorkDetails
 from myproject.models.employeeLogin import EmployeeLogin
 from myproject.models.departments import Departments
@@ -21,4 +22,16 @@ class EmployeeWorkDetailsApi(Resource):
                 return {"Status": "Failed", "Exception": str(e)}, 500
         else:
             return {"employee": "Not Found"}, 404
+
+    def get(self, empID):
+        employee = EmployeeLogin.objects(_id=empID).first()
+        if employee != None:
+            emp = EmployeeWorkDetails.objects(_id=empID)
+            data = loads(emp.to_json())
+            return data, 200
+
+        else:
+            return{"employee": "Not Found"}, 404
+        
+
 

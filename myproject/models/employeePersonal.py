@@ -4,9 +4,9 @@ from myproject import db
 class EmployeePersonal(db.Document):
     _id = db.StringField(required=True)
     employeeDOB = db.DateTimeField(required=True)
-    employeeSalary = db.FloatField(required=True)
+    employeeMobileNo = db.ListField(required=True)
+    employeeAddress = db.StringField(required=True, max_length=120)
     employeeJoindate = db.DateTimeField(required=True)
-    apprasialsOverTheYears = db.StringField(default=None)
 
     meta = {
         "indexes": ["employeeJoindate"]

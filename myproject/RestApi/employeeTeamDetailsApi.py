@@ -1,7 +1,9 @@
 from flask_restful import Resource, request
+from json import loads
 from myproject.models.employeeLogin import EmployeeLogin
 from myproject.models.employeeTeamDetails import EmployeeTeamDetails
 from myproject.models.employeePastTeams import EmployeePastTeams
+from myproject.helper.helpers import dateToString
 
 
 class EmployeeTeamDetailsApi(Resource):
@@ -24,5 +26,23 @@ class EmployeeTeamDetailsApi(Resource):
 
         else:
             {"Employee": "Not Found"}, 404
-        
 
+    def get(self, empID):
+        teamdet = EmployeeTeamDetails.objects(_id=empID).first()
+        if teamdet != None:
+            lDate = None
+            for team in teamdet["teamsWorked"]:
+                jDate = dateToString(team, "joinedTeam")
+                if team.leftTeam != None:
+                    lDate = dateToString(team, "leftTeam")
+
+            data = loads(teamdet.to_json())
+            for team in data["teamsWorked"]:
+                team["joinedTeam"] = jDate
+                if lDate != None:
+                    team["leftTeam"] = lDate
+
+            return data, 200
+
+        else:
+            return {"employee": "Not Found"}, 404

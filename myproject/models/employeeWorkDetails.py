@@ -7,6 +7,8 @@ class EmployeeWorkDetails(db.Document):
     position = db.ListField(unique=True)
     teamId = db.StringField(required=True)
     teamLeader = db.BooleanField(default=False)
+    departmentHead = db.BooleanField(default=False)
+    manager = db.BooleanField(default=False)
     
 
 
